@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 class TokenVerifyier {
   constructor(token) {
-    if(!token || token.length === 0) {
+    if (!token || token.length === 0) {
       throw new Error('Token is missing in request headers');
     } else if (typeof token !== 'string') {
       throw new Error('Invalid token value');

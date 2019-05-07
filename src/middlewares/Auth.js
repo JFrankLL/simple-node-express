@@ -1,22 +1,22 @@
-const TokenVerifyier = require("../utils/TokenVerifier");
+const TokenVerifyier = require('../utils/TokenVerifier');
 
 module.exports = (req, res, next) => {
   const {
-    headers: { authorization }
+    headers: { authorization },
   } = req;
 
   try {
     const bearerToken = new TokenVerifyier(authorization);
 
     if (!bearerToken.isValid()) {
-      return res.status(403).end("Expired token");
+      return res.status(403).end('Expired token');
     }
 
     res.locals.auth = {
       authenticated: true,
-      bearer: bearerToken.getPayload()
+      bearer: bearerToken.getPayload(),
     };
-    next();
+    return next();
   } catch (error) {
     return res.status(403).end(error.message);
   }
