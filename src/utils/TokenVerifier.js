@@ -7,26 +7,40 @@ class TokenVerifyier {
     } else if (typeof token !== 'string') {
       throw new Error('Invalid token value');
     }
-    this.token = token.split(' ').pop();
+    const bearerToken = token.split(' ').pop();
+    if (bearerToken.length === 0) {
+      throw new Error('Invalid token value');
+    }
+    this.token = bearerToken;
   }
 
   isValid() {
-    const { iat, exp, nbf } = this.getPayload();
-    const expiresIn = iat || exp || nbf;
+    try {
+      const { iat, exp, nbf } = this.getPayload();
+      const expiresIn = iat || exp || nbf;
 
-    const expiryTime = new Date(expiresIn).getTime();
-    const currentDateTime = new Date(Date.now()).getTime();
+      const expiryTime = new Date(expiresIn).getTime();
+      const currentDateTime = new Date(Date.now()).getTime();
 
-    // Expirated
-    if (currentDateTime >= expiryTime) {
-      return false;
+      // Expirated
+      if (currentDateTime >= expiryTime) {
+        return false;
+      }
+      // Valid
+      return true;
+    } catch (error) {
+      throw new Error('Invalid token');
     }
-    // Valid
-    return true;
   }
 
   getPayload() {
-    return jwt.decode(this.token);
+    try {
+      const decodeOptions = { complete: true };
+      const { payload } = jwt.decode(this.token, decodeOptions);
+      return payload;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

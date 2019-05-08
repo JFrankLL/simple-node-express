@@ -9,7 +9,8 @@
       }
     ],
     "prettier/prettier": "error",
-    "max-len": ["error", 80]
+    "max-len": ["error", 80],
+    "max-line-length": [true, { "limit": 80 }]
   },
   "env": {
     "browser": true
